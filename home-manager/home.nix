@@ -1,5 +1,3 @@
-# This is your home-manager configuration file
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 {
   inputs,
   lib,
@@ -7,26 +5,11 @@
   pkgs,
   ...
 }: {
-  # You can import other home-manager modules here
   imports = [
-    # If you want to use home-manager modules from other flakes (such as nix-colors):
-    # inputs.nix-colors.homeManagerModule
-
-    # You can also split up your configuration and import pieces of it here:
-    # ./nvim.nix
   ];
 
   nixpkgs = {
     overlays = [
-      # If you want to use overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
     ];
     # Configure your nixpkgs instance
     config = {
@@ -43,7 +26,33 @@
 
   # Enable home-manager and git
   programs.home-manager.enable = true;
-  programs.git.enable = true;
+
+  #programs.kitty.enable = true;
+  #wayland.windowManager.hyprland.enable = true; 
+
+  dconf.settings = {
+    "org/gnome/mutter" = {
+      edge-tiling = true;
+    };
+  };
+
+  programs.git = {
+    enable = true;
+    userName = "squaredx";
+    userEmail = "jason.wolfe71@gmail.com";
+  };
+
+  programs.chromium = {
+    package = pkgs.google-chrome;
+
+    commandLineArgs = [
+        # Wayland
+        "--ozone-platform=wayland"
+        "--ozone-platform-hint=auto"
+    ];
+  };
+
+
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";

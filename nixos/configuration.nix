@@ -7,35 +7,12 @@
   pkgs,
   ...
 }: {
-  # You can import other NixOS modules here
   imports = [
-    # If you want to use modules from other flakes (such as nixos-hardware):
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
-
-    # You can also split up your configuration and import pieces of it here:
-    # ./users.nix
-
-    # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
   ];
 
   nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # If you want to use overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    # Configure your nixpkgs instance
     config = {
-      # Disable if you don't want unfree packages
       allowUnfree = true;
     };
   };
@@ -44,7 +21,6 @@
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
     settings = {
-      # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
       # Opinionated: disable global registry
       flake-registry = "";
@@ -81,6 +57,12 @@
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
+
+  # Enable Hyprland
+  #programs.hyprland.enable = true;
+
+  # For electron apps
+  #environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -119,24 +101,37 @@
     };
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
     git
+    kitty
     neovim
     vscode
-    microsoft-edge
+    google-chrome
+    gnome.gnome-tweaks
+    dconf2nix
+    gnome.dconf-editor
+    gnome-extension-manager
   ];
 
-  xdg.mime.defaultApplications = {
-    "text/html" = "microsoft-edge.desktop";
-    "x-scheme-handler/http" = "microsoft-edge.desktop";
-    "x-scheme-handler/https" = "microsoft-edge.desktop";
-    "x-scheme-handler/about" = "microsoft-edge.desktop";
-    "x-scheme-handler/unknown" = "microsoft-edge.desktop";
-  };
+  # xdg.mime.defaultApplications = {
+  #   "text/html" = "microsoft-edge.desktop";
+  #   "x-scheme-handler/http" = "microsoft-edge.desktop";
+  #   "x-scheme-handler/https" = "microsoft-edge.desktop";
+  #   "x-scheme-handler/about" = "microsoft-edge.desktop";
+  #   "x-scheme-handler/unknown" = "microsoft-edge.desktop";
+  # };
+
+  environment.gnome.excludePackages = (with pkgs; [
+    epiphany #web browser
+    gnome-tour
+    gnome-console
+  ]) ++ (with pkgs.gnome; [
+    gnome-music
+    gnome-characters
+    yelp
+    gnome-contacts
+    gnome-shell-extensions
+  ]);
 
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
