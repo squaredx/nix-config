@@ -96,6 +96,13 @@
     TTYVTDisallocate = true;
   };
 
+  systemd.user.services.hyprpolkitagent = {
+    enable = true;
+    description = "Hyprpolkit agent";
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = "${pkgs.hyprpolkitagent}/bin/hyprpolkitagent";
+  };
+
   # Enable Hyprland
   programs.hyprland = {
     enable = true;
@@ -181,18 +188,19 @@
     neovim
     vscode
     google-chrome
-    powertop
-    btop
-    networkmanagerapplet
+    powertop # power monitor
+    btop # system monitor
+    networkmanagerapplet #managing network
     # gnome.gnome-tweaks
     # dconf2nix
     # gnome.dconf-editor
     # gnome-extension-manager
     # For hyprland
     dunst #Notification daemon
-    rofi-wayland
-    rofi-power-menu
-    waybar
+    rofi-wayland # application launcher
+    rofi-power-menu # control system power through rofi
+    waybar # top status bar
+    hyprpolkitagent # hyprland polkit
     #qt5-wayland
     #qt6-wayland
     yazi # TUI File manager
