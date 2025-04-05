@@ -23,7 +23,6 @@
     nixosConfigurations = {
       nixos-laptop = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
-        # > Our main nixos configuration file <
         modules = [./nixos/configuration.nix];
       };
     };
@@ -34,7 +33,6 @@
       "jason@nixos-laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs;};
-        # > Our main home-manager configuration file <
         modules = [./home-manager/home.nix];
       };
     };

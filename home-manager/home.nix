@@ -6,6 +6,7 @@
   ...
 }: {
   imports = [
+    # ./hyprland.nix
   ];
 
   nixpkgs = {
@@ -30,11 +31,11 @@
   #programs.kitty.enable = true;
   #wayland.windowManager.hyprland.enable = true; 
 
-  dconf.settings = {
-    "org/gnome/mutter" = {
-      edge-tiling = true;
-    };
-  };
+  # dconf.settings = {
+  #   "org/gnome/mutter" = {
+  #     edge-tiling = true;
+  #   };
+  # };
 
   programs.git = {
     enable = true;
@@ -52,6 +53,30 @@
     ];
   };
 
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 16;
+  };
+
+  gtk = {
+    enable = true;
+    cursorTheme = {
+      name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
+    };
+  # Note the different syntax for gtk3 and gtk4
+    gtk3.extraConfig = {
+      "gtk-cursor-theme-name" = "Bibata-Modern-Classic";
+    };
+    gtk4.extraConfig = {
+      Settings = ''
+      gtk-cursor-theme-name=Bibata-Modern-Classic
+      '';
+    };
+  };
 
 
   # Nicely reload system units when changing configs
