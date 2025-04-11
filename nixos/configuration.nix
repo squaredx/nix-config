@@ -201,9 +201,11 @@
     rofi-power-menu # control system power through rofi
     waybar # top status bar
     hyprpolkitagent # hyprland polkit
-    #qt5-wayland
-    #qt6-wayland
     yazi # TUI File manager
+    hyprpaper # Wallpaper
+    hypridle # idle handler
+    hyprlock # lockscreen
+    nautilus
   ];
   
 

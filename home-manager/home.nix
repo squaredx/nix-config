@@ -3,10 +3,11 @@
   lib,
   config,
   pkgs,
+  outputs,
   ...
 }: {
   imports = [
-    # ./hyprland.nix
+    ./hyprland.nix
   ];
 
   nixpkgs = {
