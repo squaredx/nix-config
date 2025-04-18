@@ -116,12 +116,6 @@
   # For electron apps
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  # Configure keymap in X11
-  # services.xserver.xkb = {
-  #   layout = "us";
-  #   variant = "";
-  # };
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -138,6 +132,7 @@
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
+  security.polkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -205,7 +200,8 @@
     hyprpaper # Wallpaper
     hypridle # idle handler
     hyprlock # lockscreen
-    nautilus
+    nautilus # file browser
+    brightnessctl #for controlling screen brightness
   ];
   
 

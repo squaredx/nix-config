@@ -8,6 +8,7 @@
 }: {
   imports = [
     ./hyprland.nix
+    ./hyprpaper.nix
   ];
 
   nixpkgs = {
@@ -29,8 +30,9 @@
   # Enable home-manager and git
   programs.home-manager.enable = true;
 
-  #programs.kitty.enable = true;
-  #wayland.windowManager.hyprland.enable = true; 
+  services.easyeffects = {
+    enable = true;
+  };
 
   # dconf.settings = {
   #   "org/gnome/mutter" = {
@@ -68,7 +70,7 @@
       name = "Bibata-Modern-Classic";
       package = pkgs.bibata-cursors;
     };
-  # Note the different syntax for gtk3 and gtk4
+    # Note the different syntax for gtk3 and gtk4
     gtk3.extraConfig = {
       "gtk-cursor-theme-name" = "Bibata-Modern-Classic";
     };
