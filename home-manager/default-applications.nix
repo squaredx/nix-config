@@ -1,184 +1,99 @@
+{ pkgs, lib, ... }:
+with lib;
 let
-  audioDefaults = [ "mpv.desktop" ];
-  videoDefaults = [ "mpv.desktop" ];
-  imageDefaults = [ "imv.desktop" ];
-  textDefaults = [ "codium.desktop" ];
-  fontDefaults = [ "org.gnome.font-viewer.desktop" ];
-  fileBrowserDefaults = [ "inode/directory=nautilus.desktop" ];
+  defaultApps = {
+    browser = [ "google-chrome.desktop" ];
+    #text = [ "org.gnome.TextEditor.desktop" ];
+    #image = [ "imv-dir.desktop" ];
+    audio = [ "mpv.desktop" ];
+    video = [ "mpv.desktop" ];
+    directory = [ "nautilus.desktop" ];
+    #office = [ "libreoffice.desktop" ];
+    #pdf = [ "org.gnome.Evince.desktop" ];
+    #terminal = [ "ghostty.desktop" ];
+    #archive = [ "org.gnome.FileRoller.desktop" ];
+  };
+
+  mimeMap = {
+    # text = [ "text/plain" ];
+    # image = [
+    #   "image/bmp"
+    #   "image/gif"
+    #   "image/jpeg"
+    #   "image/jpg"
+    #   "image/png"
+    #   "image/svg+xml"
+    #   "image/tiff"
+    #   "image/vnd.microsoft.icon"
+    #   "image/webp"
+    # ];
+    audio = [
+      "audio/aac"
+      "audio/mpeg"
+      "audio/ogg"
+      "audio/opus"
+      "audio/wav"
+      "audio/webm"
+      "audio/x-matroska"
+    ];
+    video = [
+      "video/mp2t"
+      "video/mp4"
+      "video/mpeg"
+      "video/ogg"
+      "video/webm"
+      "video/x-flv"
+      "video/x-matroska"
+      "video/x-msvideo"
+    ];
+    directory = [ "inode/directory" ];
+    browser = [
+      "text/html"
+      "x-scheme-handler/about"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+      "x-scheme-handler/unknown"
+    ];
+    # office = [
+    #   "application/vnd.oasis.opendocument.text"
+    #   "application/vnd.oasis.opendocument.spreadsheet"
+    #   "application/vnd.oasis.opendocument.presentation"
+    #   "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    #   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    #   "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    #   "application/msword"
+    #   "application/vnd.ms-excel"
+    #   "application/vnd.ms-powerpoint"
+    #   "application/rtf"
+    # ];
+    # pdf = [ "application/pdf" ];
+    # terminal = [ "terminal" ];
+    # archive = [
+    #   "application/zip"
+    #   "application/rar"
+    #   "application/7z"
+    #   "application/*tar"
+    # ];
+  };
+
+  associations =
+    with lists;
+    listToAttrs (
+      flatten (
+        mapAttrsToList (
+          key: map (type: attrsets.nameValuePair type defaultApps."${key}")
+        ) mimeMap
+      )
+    );
 in
 {
-  xdg = {
-    enable = true;
-    mime.enable = true;
-    mimeApps = {
-      enable = true;
-      defaultApplications = {
-        "inode/directory" = fileBrowserDefaults;
+  xdg.configFile."mimeapps.list".force = true;
+  xdg.mimeApps.enable = true;
+  xdg.mimeApps.associations.added = associations;
+  xdg.mimeApps.defaultApplications = associations;
 
-        # "audio/3gpp" = audioDefaults;
-        # "audio/3gpp2" = audioDefaults;
-        # "audio/aac" = audioDefaults;
-        # "audio/adpcm" = audioDefaults;
-        # "audio/aiff" = audioDefaults;
-        # "audio/basic" = audioDefaults;
-        # "audio/flac" = audioDefaults;
-        # "audio/midi" = audioDefaults;
-        # "audio/mp4" = audioDefaults;
-        # "audio/mpeg" = audioDefaults;
-        # "audio/ogg" = audioDefaults;
-        # "audio/opus" = audioDefaults;
-        # "audio/vnd.digital-winds" = audioDefaults;
-        # "audio/vnd.dts" = audioDefaults;
-        # "audio/vnd.dts.hd" = audioDefaults;
-        # "audio/vnd.lucent.voice" = audioDefaults;
-        # "audio/vnd.ms-playready.media.pya" = audioDefaults;
-        # "audio/vnd.nuera.ecelp4800" = audioDefaults;
-        # "audio/vnd.nuera.ecelp7470" = audioDefaults;
-        # "audio/vnd.nuera.ecelp9600" = audioDefaults;
-        # "audio/wav" = audioDefaults;
-        # "audio/webm" = audioDefaults;
-        # "audio/x-aiff" = audioDefaults;
-        # "audio/x-matroska" = audioDefaults;
-        # "audio/x-mpegurl" = audioDefaults;
-        # "audio/x-ms-wax" = audioDefaults;
-        # "audio/x-ms-wma" = audioDefaults;
-        # "audio/x-pn-realaudio" = audioDefaults;
-        # "audio/x-pn-realaudio-plugin" = audioDefaults;
-
-        # "font/otf" = fontDefaults;
-        # "font/woff" = fontDefaults;
-        # "font/woff2" = fontDefaults;
-
-        # "image/avif" = imageDefaults;
-        # "image/bmp" = imageDefaults;
-        # "image/cgm" = imageDefaults;
-        # "image/g3fax" = imageDefaults;
-        # "image/gif" = imageDefaults;
-        # "image/heic" = imageDefaults;
-        # "image/ief" = imageDefaults;
-        # "image/jpeg" = imageDefaults;
-        # "image/pjpeg" = imageDefaults;
-        # "image/png" = imageDefaults;
-        # "image/prs.btif" = imageDefaults;
-        # "image/svg+xml" = imageDefaults;
-        # "image/tiff" = imageDefaults;
-        # "image/vnd.adobe.photoshop" = imageDefaults;
-        # "image/vnd.djvu" = imageDefaults;
-        # "image/vnd.dwg" = imageDefaults;
-        # "image/vnd.dxf" = imageDefaults;
-        # "image/vnd.fastbidsheet" = imageDefaults;
-        # "image/vnd.fpx" = imageDefaults;
-        # "image/vnd.fst" = imageDefaults;
-        # "image/vnd.fujixerox.edmics-mmr" = imageDefaults;
-        # "image/vnd.fujixerox.edmics-rlc" = imageDefaults;
-        # "image/vnd.ms-modi" = imageDefaults;
-        # "image/vnd.net-fpx" = imageDefaults;
-        # "image/vnd.wap.wbmp" = imageDefaults;
-        # "image/vnd.xiff" = imageDefaults;
-        # "image/webp" = imageDefaults;
-        # "image/x-adobe-dng" = imageDefaults;
-        # "image/x-canon-cr2" = imageDefaults;
-        # "image/x-canon-crw" = imageDefaults;
-        # "image/x-cmu-raster" = imageDefaults;
-        # "image/x-cmx" = imageDefaults;
-        # "image/x-epson-erf" = imageDefaults;
-        # "image/x-freehand" = imageDefaults;
-        # "image/x-fuji-raf" = imageDefaults;
-        # "image/x-icns" = imageDefaults;
-        # "image/x-icon" = imageDefaults;
-        # "image/x-kodak-dcr" = imageDefaults;
-        # "image/x-kodak-k25" = imageDefaults;
-        # "image/x-kodak-kdc" = imageDefaults;
-        # "image/x-minolta-mrw" = imageDefaults;
-        # "image/x-nikon-nef" = imageDefaults;
-        # "image/x-olympus-orf" = imageDefaults;
-        # "image/x-panasonic-raw" = imageDefaults;
-        # "image/x-pcx" = imageDefaults;
-        # "image/x-pentax-pef" = imageDefaults;
-        # "image/x-pict" = imageDefaults;
-        # "image/x-portable-anymap" = imageDefaults;
-        # "image/x-portable-bitmap" = imageDefaults;
-        # "image/x-portable-graymap" = imageDefaults;
-        # "image/x-portable-pixmap" = imageDefaults;
-        # "image/x-rgb" = imageDefaults;
-        # "image/x-sigma-x3f" = imageDefaults;
-        # "image/x-sony-arw" = imageDefaults;
-        # "image/x-sony-sr2" = imageDefaults;
-        # "image/x-sony-srf" = imageDefaults;
-        # "image/x-xbitmap" = imageDefaults;
-        # "image/x-xpixmap" = imageDefaults;
-        # "image/x-xwindowdump" = imageDefaults;
-
-        # "text/calendar" = textDefaults;
-        # "text/css" = textDefaults;
-        # "text/csv" = textDefaults;
-        # "text/html" = textDefaults;
-        # "text/javascript" = textDefaults;
-        # "text/markdown" = textDefaults;
-        # "text/mathml" = textDefaults;
-        # "text/plain" = textDefaults;
-        # "text/prs.lines.tag" = textDefaults;
-        # "text/richtext" = textDefaults;
-        # "text/sgml" = textDefaults;
-        # "text/tab-separated-values" = textDefaults;
-        # "text/troff" = textDefaults;
-        # "text/uri-list" = textDefaults;
-        # "text/vnd.curl" = textDefaults;
-        # "text/vnd.curl.dcurl" = textDefaults;
-        # "text/vnd.curl.mcurl" = textDefaults;
-        # "text/vnd.curl.scurl" = textDefaults;
-        # "text/vnd.fly" = textDefaults;
-        # "text/vnd.fmi.flexstor" = textDefaults;
-        # "text/vnd.graphviz" = textDefaults;
-        # "text/vnd.in3d.3dml" = textDefaults;
-        # "text/vnd.in3d.spot" = textDefaults;
-        # "text/vnd.sun.j2me.app-descriptor" = textDefaults;
-        # "text/vnd.wap.si" = textDefaults;
-        # "text/vnd.wap.sl" = textDefaults;
-        # "text/vnd.wap.wml" = textDefaults;
-        # "text/vnd.wap.wmlscript" = textDefaults;
-        # "text/x-asm" = textDefaults;
-        # "text/x-c" = textDefaults;
-        # "text/x-fortran" = textDefaults;
-        # "text/x-java-source" = textDefaults;
-        # "text/x-pascal" = textDefaults;
-        # "text/x-python" = textDefaults;
-        # "text/x-setext" = textDefaults;
-        # "text/x-uuencode" = textDefaults;
-        # "text/x-vcalendar" = textDefaults;
-        # "text/x-vcard" = textDefaults;
-
-        # "video/3gpp" = videoDefaults;
-        # "video/3gpp2" = videoDefaults;
-        # "video/h261" = videoDefaults;
-        # "video/h263" = videoDefaults;
-        # "video/h264" = videoDefaults;
-        # "video/jpeg" = videoDefaults;
-        # "video/jpm" = videoDefaults;
-        # "video/mj2" = videoDefaults;
-        # "video/mp2t" = videoDefaults;
-        # "video/mp4" = videoDefaults;
-        # "video/mpeg" = videoDefaults;
-        # "video/ogg" = videoDefaults;
-        # "video/quicktime" = videoDefaults;
-        # "video/vnd.fvt" = videoDefaults;
-        # "video/vnd.mpegurl" = videoDefaults;
-        # "video/vnd.ms-playready.media.pyv" = videoDefaults;
-        # "video/vnd.vivo" = videoDefaults;
-        # "video/webm" = videoDefaults;
-        # "video/x-f4v" = videoDefaults;
-        # "video/x-fli" = videoDefaults;
-        # "video/x-flv" = videoDefaults;
-        # "video/x-m4v" = videoDefaults;
-        # "video/x-matroska" = videoDefaults;
-        # "video/x-ms-asf" = videoDefaults;
-        # "video/x-ms-wm" = videoDefaults;
-        # "video/x-ms-wmv" = videoDefaults;
-        # "video/x-ms-wmx" = videoDefaults;
-        # "video/x-ms-wvx" = videoDefaults;
-        # "video/x-msvideo" = videoDefaults;
-        # "video/x-sgi-movie" = videoDefaults;
-      };
-    };
-  };
+  # home.sessionVariables = {
+  #   # prevent wine from creating file associations
+  #   WINEDLLOVERRIDES = "winemenubuilder.exe=d";
+  # };
 }

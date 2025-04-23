@@ -21,7 +21,7 @@ in
       };
 
       label = {
-        text = "Please enter your password";
+        text = "Locked";
         color = "rgba(222, 222, 222, 1.0)";
         font_size = 50;
         font_family = "FiraCode";

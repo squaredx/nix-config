@@ -9,6 +9,10 @@
   imports = [
     ./hyprland.nix
     ./hyprpaper.nix
+    ./hyprlock.nix
+    ./hypridle.nix
+    ./waybar
+    ./default-applications.nix
   ];
 
   nixpkgs = {

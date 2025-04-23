@@ -34,6 +34,7 @@
     registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
+  
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -96,6 +97,10 @@
     TTYVTDisallocate = true;
   };
 
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.hyprland.enableGnomeKeyring = true;
+  security.pam.services.login.enableGnomeKeyring = true;
+
   systemd.user.services.hyprpolkitagent = {
     enable = true;
     description = "Hyprpolkit agent";
@@ -113,8 +118,14 @@
   # Enable ZSH
   programs.zsh.enable = true;
 
-  # For electron apps
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  environment.sessionVariables = {
+    # For electron apps
+    NIXOS_OZONE_WL = "1";
+    #proton
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/jason/.steam/root/compatibilitytools.d";
+    # for Gnome virtual fs
+    #GIO_EXTRA_MODULES = "${pkgs.gvfs}/lib/gio/modules";
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -177,15 +188,45 @@
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true; # Thumbnail support for images
 
+  programs.steam = {
+    enable = true;
+    gamescopeSession = {
+      enable = true;
+    };
+  };
+  programs.gamemode.enable = true;
+
   environment.systemPackages = with pkgs; [
     git
     kitty
     neovim
     vscode
     google-chrome
+    appimage-run # AppImage Runner
+    cmake # CMake
+    coreutils # GNU Core Utilities
+    dconf # DConf Editor
+    gcc # GNU Compiler Collection
+    lm_sensors # sensors
+    lshw # Hardware List
+    rclone # cloud storage client
+    traceroute # Network Traceroute
+    tree # List directories recursively
+    unzip # Unzip files
+    usbutils # Provides lsusb
+    wget # Web Downloader
+    xdg-user-dirs
+    libva-utils # vainfo
+    vdpauinfo # VDPAU (Video Decode and Presentation API for Unix)
+    vulkan-tools # vulkaninfo
+    mpv # video player
+    protonup-qt # proton manager
+    bottles
     powertop # power monitor
     btop # system monitor
     networkmanagerapplet #managing network
+    gamescope
+    gnome.gvfs
     # gnome.gnome-tweaks
     # dconf2nix
     # gnome.dconf-editor
@@ -203,6 +244,23 @@
     nautilus # file browser
     brightnessctl #for controlling screen brightness
   ];
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    steam = pkgs.steam.override {
+      extraPkgs = pkgs: with pkgs; [
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXinerama
+        xorg.libXScrnSaver
+        libpng
+        libpulseaudio
+        libvorbis
+        stdenv.cc.cc.lib
+        libkrb5
+        keyutils
+      ];
+    };
+  };
   
 
   # xdg.mime.defaultApplications = {

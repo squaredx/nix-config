@@ -5,18 +5,21 @@
     settings = {
       monitor = [
         ",preferred,auto,1.8"
+        "desc:AOC U34G2G4R3 0x000002AD,3440x1440@99.98Hz,auto,1"
         "DP-1,preferred,auto,1"
         "DP-2,preferred,auto,1"
       ];
 
       "$terminal" = "kitty";
-      "$fileManager" = "dolphin";
+      "$fileManager" = "nautilus";
       "$menu" = "rofi -show drun";
       "$powerMenu" = "rofi -show power-menu -modi power-menu:rofi-power-menu";
 
       "exec-once" = [
         "waybar &"
         "systemctl --user start hyprpolkitagent"
+        "eval $(gnome-keyring-daemon --start)"
+        "export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gcr/ssh"
         "hyprpaper"
       ];
 
@@ -27,8 +30,8 @@
 
       general = {
         gaps_in = 5;
-        gaps_out = 20;
-        border_size = 2;
+        gaps_out = 12;
+        border_size = 1;
         "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
         "col.inactive_border" = "rgba(595959aa)";
         resize_on_border = false;
@@ -37,7 +40,7 @@
       };
 
       decoration = {
-        rounding = 10;
+        rounding = 5;
         active_opacity = 1.0;
         inactive_opacity = 1.0;
 
@@ -111,6 +114,7 @@
         sensitivity = 0;
         touchpad = {
           natural_scroll = true;
+          disable_while_typing = false;
           clickfinger_behavior = 1;
         };
       };
@@ -127,8 +131,8 @@
       "$mainMod" = "SUPER";
 
       bind = [
-        "$mainMod, Q, exec, $terminal"
-        "$mainMod, C, killactive,"
+        "$mainMod, Return, exec, $terminal"
+        "$mainMod, Q, killactive,"
         #"$mainMod, M, exit,"
         "$mainMod, E, exec, $fileManager"
         "$mainMod, V, togglefloating,"
