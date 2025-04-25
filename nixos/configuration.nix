@@ -9,6 +9,8 @@
 }: {
   imports = [
     ./hardware-configuration.nix
+    ./features/hyprland.nix
+    ./features/kde.nix
   ];
 
   nixpkgs = {
@@ -97,24 +99,6 @@
     TTYVTDisallocate = true;
   };
 
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.hyprland.enableGnomeKeyring = true;
-  security.pam.services.login.enableGnomeKeyring = true;
-
-  systemd.user.services.hyprpolkitagent = {
-    enable = true;
-    description = "Hyprpolkit agent";
-    wantedBy = [ "default.target" ];
-    serviceConfig.ExecStart = "${pkgs.hyprpolkitagent}/bin/hyprpolkitagent";
-  };
-
-  # Enable Hyprland
-  programs.hyprland = {
-    enable = true;
-    withUWSM = true; 
-    xwayland.enable = true;
-  };
-
   # Enable ZSH
   programs.zsh.enable = true;
 
@@ -136,9 +120,6 @@
     nssmdns4 = true;
     openFirewall = true;
   };
-
-  # Manage bluetooth
-  services.blueman.enable = true;
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
@@ -173,27 +154,16 @@
       extraGroups = [ "networkmanager" "wheel" ];
       shell = pkgs.zsh;
     };
-  };
-
-  programs.xfconf.enable = true;
-
-  programs.thunar = {
-    enable = true;
-    plugins = with pkgs.xfce; [
-      thunar-archive-plugin
-      thunar-volman
-    ];
-  };
+  }; 
   # Thunar settings
-  services.gvfs.enable = true; # Mount, trash, and other functionalities
-  services.tumbler.enable = true; # Thumbnail support for images
+  #services.gvfs.enable = true; # Mount, trash, and other functionalities
+  #services.tumbler.enable = true; # Thumbnail support for images
 
   programs.steam = {
     enable = true;
-    gamescopeSession = {
-      enable = true;
-    };
   };
+
+  # Game mode
   programs.gamemode.enable = true;
 
   environment.systemPackages = with pkgs; [
@@ -226,23 +196,6 @@
     btop # system monitor
     networkmanagerapplet #managing network
     gamescope
-    gnome.gvfs
-    # gnome.gnome-tweaks
-    # dconf2nix
-    # gnome.dconf-editor
-    # gnome-extension-manager
-    # For hyprland
-    dunst #Notification daemon
-    rofi-wayland # application launcher
-    rofi-power-menu # control system power through rofi
-    waybar # top status bar
-    hyprpolkitagent # hyprland polkit
-    yazi # TUI File manager
-    hyprpaper # Wallpaper
-    hypridle # idle handler
-    hyprlock # lockscreen
-    nautilus # file browser
-    brightnessctl #for controlling screen brightness
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {
@@ -261,29 +214,6 @@
       ];
     };
   };
-  
-
-  # xdg.mime.defaultApplications = {
-  #   "text/html" = "microsoft-edge.desktop";
-  #   "x-scheme-handler/http" = "microsoft-edge.desktop";
-  #   "x-scheme-handler/https" = "microsoft-edge.desktop";
-  #   "x-scheme-handler/about" = "microsoft-edge.desktop";
-  #   "x-scheme-handler/unknown" = "microsoft-edge.desktop";
-  # };
-
-  # environment.gnome.excludePackages = (with pkgs; [
-  #   epiphany #web browser
-  #   gnome-tour
-  #   gnome-console
-  # ]) ++ (with pkgs.gnome; [
-  #   gnome-music
-  #   gnome-characters
-  #   yelp
-  #   gnome-contacts
-  #   gnome-shell-extensions
-  # ]);
-
-
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.11";
 }
