@@ -9,8 +9,9 @@
 }: {
   imports = [
     ./hardware-configuration.nix
-    ./features/hyprland.nix
-    ./features/kde.nix
+    #./features/hyprland.nix
+    #./features/kde.nix
+    ./features/gnome.nix
   ];
 
   nixpkgs = {
@@ -75,29 +76,6 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
-
-  # Enables Greetd with TUIGreet for login page
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session";
-        user = "greeter";
-      };
-    };
-  };
-  
-  # From Reddit rhead to hide errors
-  systemd.services.greetd.serviceConfig = {
-    Type = "idle";
-    StandardInput = "tty";
-    StandardOutput = "tty";
-    StandardError = "journal"; # Without this errors will spam on screen
-    # Without these bootlogs will spam on screen
-    TTYReset = true;
-    TTYVHangup = true;
-    TTYVTDisallocate = true;
-  };
 
   # Enable ZSH
   programs.zsh.enable = true;
@@ -196,6 +174,7 @@
     btop # system monitor
     networkmanagerapplet #managing network
     gamescope
+    nvtop #gpu top
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {
