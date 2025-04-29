@@ -150,6 +150,7 @@
     neovim
     vscode
     google-chrome
+    librewolf
     appimage-run # AppImage Runner
     cmake # CMake
     coreutils # GNU Core Utilities
@@ -174,7 +175,7 @@
     btop # system monitor
     networkmanagerapplet #managing network
     gamescope
-    nvtop #gpu top
+    nvtopPackages.intel #gpu top
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {

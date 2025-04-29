@@ -6,17 +6,40 @@
   ...
 }: {
   #Enable Gnome and GDM
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver = {
+    enable = true;
+    displayManager.gdm = {
+      enable = true;
+      wayland = true;
+    };
+    desktopManager.gnome = {
+      enable = true;
+      extraGSettingsOverridePackages = [ pkgs.mutter ];
+      extraGSettingsOverrides = ''
+        [org.gnome.mutter]
+        experimental-features=['scale-monitor-framebuffer']
+      '';
+    };
+  };
 
-  environment.gnome.excludePackages = with pkgs; [
-    gnome-tour # GNOME Shell detects the .desktop file on first log-in.
-    gnome-user-docs
-    yelp
+  environment.systemPackages = with pkgs; [
+    adwaita-icon-theme
+    gnome-themes-extra
+    #Gnome Extensions
+    gnomeExtensions.appindicator
+    gnomeExtensions.blur-my-shell
   ];
 
-  environment.systemPackages = with pkgs.gnomeExtensions; [
-    blur-my-shell
+  #Exlude packages
+  environment.gnome.excludePackages = with pkgs; [
+    epiphany #browser
+    geary #email
+    gnome-tour
+    gnome-user-docs 
+    gnome-contacts
+    gnome-maps 
+    gnome-music
+    gnome-weather
+    yelp #tour?
   ];
 }
