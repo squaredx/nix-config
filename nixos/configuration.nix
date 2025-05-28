@@ -54,6 +54,12 @@
 
   # Set your time zone.
   time.timeZone = "America/Regina";
+
+  # Enable podman (for distrobox)
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+  };
   
   # Bluetooth hardware
   hardware.bluetooth = {
@@ -118,7 +124,11 @@
 
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
+    corefonts
     fira-code
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-emoji
   ];
 
   # Enable flatpak
@@ -133,9 +143,6 @@
       shell = pkgs.zsh;
     };
   }; 
-  # Thunar settings
-  #services.gvfs.enable = true; # Mount, trash, and other functionalities
-  #services.tumbler.enable = true; # Thumbnail support for images
 
   programs.steam = {
     enable = true;
@@ -144,6 +151,12 @@
   # Game mode
   programs.gamemode.enable = true;
 
+  # Localsend
+  programs.localsend = {
+    enable = true;
+    openFirewall = true;
+  };
+
   environment.systemPackages = with pkgs; [
     git
     kitty
@@ -151,6 +164,7 @@
     vscode
     google-chrome
     librewolf
+    rawtherapee
     appimage-run # AppImage Runner
     cmake # CMake
     coreutils # GNU Core Utilities
@@ -176,6 +190,13 @@
     networkmanagerapplet #managing network
     gamescope
     nvtopPackages.intel #gpu top
+    direnv
+    tinygo
+    go
+    gnumake
+    distrobox
+    imagemagick
+    python3
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {
