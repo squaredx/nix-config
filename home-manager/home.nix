@@ -74,6 +74,10 @@
       name = "Bibata-Modern-Classic";
       package = pkgs.bibata-cursors;
     };
+    iconTheme = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+    };
     # Note the different syntax for gtk3 and gtk4
     gtk3.extraConfig = {
       "gtk-cursor-theme-name" = "Bibata-Modern-Classic";
@@ -84,7 +88,6 @@
       '';
     };
   };
-
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
