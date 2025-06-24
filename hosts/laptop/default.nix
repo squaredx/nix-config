@@ -93,9 +93,8 @@
 
   # Fonts!
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" ]; })
     corefonts
-    fira-code
+    nerd-fonts.fira-code
     jetbrains-mono
     noto-fonts
     noto-fonts-cjk-sans
@@ -163,6 +162,8 @@
       enable = true;
       openFirewall = true;
     };
+    #enable zsh
+    zsh.enable = true;
 
     #Misc
     nix-ld.enable = true;

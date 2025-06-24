@@ -12,9 +12,9 @@
     username = "jason";
     homeDirectory = "/home/jason";
 
-    packages = {
+    # packages = {
 
-    };
+    # };
   };
   # dconf.settings = {
   #   "org/gnome/mutter" = {

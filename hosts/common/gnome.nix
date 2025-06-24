@@ -32,7 +32,7 @@
 
   #Exlude packages
   environment.gnome.excludePackages = with pkgs; [
-    epiphany #browser
+    #epiphany #browser
     geary #email
     gnome-tour
     gnome-user-docs 
