@@ -5,6 +5,7 @@
   imports = [
     ./chrome
     ./git
+    ./stylix
     ./default-applications.nix
   ];
 
