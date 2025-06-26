@@ -6,6 +6,7 @@
     ./chrome
     ./git
     ./stylix
+    ./dconf
     ./default-applications.nix
   ];
 
