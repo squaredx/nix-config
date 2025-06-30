@@ -5,6 +5,8 @@
   imports = [
     ./chrome
     ./git
+    ./ghostty
+    ./starship
     ./stylix
     ./dconf
     ./default-applications.nix
@@ -14,15 +16,18 @@
     username = "jason";
     homeDirectory = "/home/jason";
 
+    sessionPath = [
+      "$HOME/.local/bin"
+    ];
+
+    sessionVariables = {
+      TERM = "fish";
+    };
+
     # packages = {
 
     # };
   };
-  # dconf.settings = {
-  #   "org/gnome/mutter" = {
-  #     edge-tiling = true;
-  #   };
-  # };
 
   # home.pointerCursor = {
   #   gtk.enable = true;

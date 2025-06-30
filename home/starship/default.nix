@@ -6,10 +6,9 @@
     starship
   ];
 
-  xdg.configFile."starship.toml".source = ./starship.toml;
-
   programs.starship = {
     enable = true;
     enableFishIntegration = true;
-  }
+    settings = pkgs.lib.importTOML ./starship.toml;
+  };
 }

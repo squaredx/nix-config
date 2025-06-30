@@ -33,7 +33,7 @@
       isNormalUser = true;
       description = "Jason";
       extraGroups = [ "networkmanager" "wheel" ];
-      shell = pkgs.zsh;
+      shell = pkgs.fish;
     };
   }; 
 
@@ -162,8 +162,8 @@
       enable = true;
       openFirewall = true;
     };
-    #enable zsh
-    zsh.enable = true;
+    #enable fish
+    fish.enable = true;
 
     #Misc
     nix-ld.enable = true;

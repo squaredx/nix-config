@@ -13,6 +13,10 @@
       "org/gnome/shell/extensions/pop-shell" = {
         active-hint = true;
       };
+
+      "org/gnome/desktop/wm/preferences" = {
+        button-layout = "close,minimize,maximize:";
+      };
     };
   };
 }
